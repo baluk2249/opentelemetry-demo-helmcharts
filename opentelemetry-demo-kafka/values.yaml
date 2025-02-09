@@ -1,0 +1,33 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/open-telemetry/demo
+  tag: "1.12.0-kafka"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  ports:
+    - port: 9092
+      targetPort: 9092
+      name: plaintext
+    - port: 9093
+      targetPort: 9093
+      name: controller
+
+resources:
+  limits:
+    memory: 600Mi
+
+securityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+
+env:
+  OTEL_SERVICE_NAME: kafka
+  OTEL_COLLECTOR_NAME: opentelemetry-demo-otelcol
+  OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: cumulative
+  KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://opentelemetry-demo-kafka:9092
+  OTEL_EXPORTER_OTLP_ENDPOINT: http://opentelemetry-demo-otelcol:4318
+  KAFKA_HEAP_OPTS: -Xmx400M -Xms400M
+  OTEL_RESOURCE_ATTRIBUTES: service.name=kafka,service.namespace=opentelemetry-demo,service.version=1.12.0
