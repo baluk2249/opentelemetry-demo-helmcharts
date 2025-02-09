@@ -2,7 +2,7 @@
 Generate the full name of the resource
 */}}
 {{- define "opentelemetry-demo-accountingservice.fullname" -}}
-{{- printf "%s-%s" .Release.Name .Chart.Name | trunc 63 | trimSuffix "-" -}}
+name: opentelemetry-demo-kafka
 {{- end -}}
 
 {{/*
