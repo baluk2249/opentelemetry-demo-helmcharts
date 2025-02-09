@@ -25,6 +25,7 @@ env:
   KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://opentelemetry-demo-kafka:9092
   OTEL_EXPORTER_OTLP_ENDPOINT: http://$OTEL_COLLECTOR_NAME:4318
   KAFKA_HEAP_OPTS: -Xmx400M -Xms400M
+  KAFKA_SERVICE_ADDR: opentelemetry-demo-kafka:9092
   OTEL_RESOURCE_ATTRIBUTES: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.12.0
 
 initContainers:
