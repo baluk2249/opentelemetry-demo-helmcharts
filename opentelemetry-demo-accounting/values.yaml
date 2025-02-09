@@ -3,7 +3,7 @@ replicaCount: 1
 instance: opentelemetry-demo
 part-of: opentelemetry-demo
 component: accountingservice
-name: accountingservice
+name: opentelemetry-demo-accountingservice
 image:
   repository: ghcr.io/open-telemetry/demo
   tag: "1.12.0-accountingservice"
