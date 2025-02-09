@@ -1,0 +1,5 @@
+apiVersion: v2
+name: opentelemetry-demo-accountingservice
+description: A Helm chart for Kubernetes
+version: 0.1.0
+appVersion: "1.12.0"
