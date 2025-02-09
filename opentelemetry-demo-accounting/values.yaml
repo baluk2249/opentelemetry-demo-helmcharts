@@ -1,5 +1,9 @@
 replicaCount: 1
 
+instance: opentelemetry-demo
+part-of: opentelemetry-demo
+component: accountingservice
+name: accountingservice
 image:
   repository: ghcr.io/open-telemetry/demo
   tag: "1.12.0-accountingservice"
@@ -19,9 +23,9 @@ env:
   OTEL_COLLECTOR_NAME: opentelemetry-demo-otelcol
   OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: cumulative
   KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://opentelemetry-demo-kafka:9092
-  OTEL_EXPORTER_OTLP_ENDPOINT: http://opentelemetry-demo-otelcol:4318
+  OTEL_EXPORTER_OTLP_ENDPOINT: http://$OTEL_COLLECTOR_NAME:4318
   KAFKA_HEAP_OPTS: -Xmx400M -Xms400M
-  OTEL_RESOURCE_ATTRIBUTES: service.name=kafka,service.namespace=opentelemetry-demo,service.version=1.12.0
+  OTEL_RESOURCE_ATTRIBUTES: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.12.0
 
 initContainers:
   image: busybox
