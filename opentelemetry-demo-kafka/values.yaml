@@ -28,6 +28,7 @@ env:
   OTEL_COLLECTOR_NAME: opentelemetry-demo-otelcol
   OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: cumulative
   KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://opentelemetry-demo-kafka:9092
+  KAFKA_SERVICE_ADDR: opentelemetry-demo-kafka:9092
   OTEL_EXPORTER_OTLP_ENDPOINT: http://opentelemetry-demo-otelcol:4318
   KAFKA_HEAP_OPTS: -Xmx400M -Xms400M
   OTEL_RESOURCE_ATTRIBUTES: service.name=kafka,service.namespace=opentelemetry-demo,service.version=1.12.0
