@@ -10,7 +10,7 @@ Common labels
 */}}
 {{- define "opentelemetry-demo-kafka.labels" -}}
 opentelemetry.io/name: opentelemetry-demo-kafka
-app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/instance: opentelemetry-demo
 app.kubernetes.io/component: kafka
 app.kubernetes.io/name: opentelemetry-demo-kafka
 app.kubernetes.io/version: {{ .Chart.AppVersion }}
