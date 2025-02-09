@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: opentelemetry-demo-kafa
+  name: {{ .Values.name }}
   labels:
     {{- include "opentelemetry-demo-kafka.labels" . | nindent 4 }}
 spec:
