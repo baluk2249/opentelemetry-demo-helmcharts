@@ -12,7 +12,7 @@ resources:
     memory: 120Mi
 
 serviceAccount:
-  name:opentelemetry-demo
+  name: opentelemetry-demo
 
 env:
   OTEL_SERVICE_NAME: accountingservice
