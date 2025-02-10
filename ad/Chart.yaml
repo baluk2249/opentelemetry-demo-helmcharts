@@ -1,0 +1,5 @@
+apiVersion: v2
+name: opentelemetry-demo-ad
+description: A Helm chart for Ad service
+version: 0.1.0
+appVersion: "1.12.0"

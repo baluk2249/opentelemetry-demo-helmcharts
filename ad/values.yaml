@@ -1,34 +1,44 @@
+name: opentelemetry-demo-ad
 replicaCount: 1
 
 instance: opentelemetry-demo
 part-of: opentelemetry-demo
-component: accountingservice
-name: opentelemetry-demo-accountingservice
-image:
-  repository: ghcr.io/open-telemetry/demo
-  tag: "1.12.0-accountingservice"
-  pullPolicy: IfNotPresent
-
-
-
-resources:
-  limits:
-    memory: 120Mi
+component: adservice
+name: opentelemetry-demo-adservice
 
 serviceAccount:
   name: opentelemetry-demo
 
+image :
+  repository: ghcr.io/open-telemetry/demo
+  tag: "1.12.0-adservice"
+  pullPolicy: IfNotPresent
+
+ports:
+  containerPort: 8080
+  name: service
+
+resources:
+  limits:
+    memory: 300Mi
+
 env:
+  AD_SERVICE_PORT: 8080
+  FLAG_HOST: opentelemetry-demo-flagd
+  FLAG_PORT: 8013
   OTEL_SERVICE_NAME: accountingservice
   OTEL_COLLECTOR_NAME: opentelemetry-demo-otelcol
   OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: cumulative
-  KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://opentelemetry-demo-kafka:9092
   OTEL_EXPORTER_OTLP_ENDPOINT: http://$OTEL_COLLECTOR_NAME:4318
-  KAFKA_HEAP_OPTS: -Xmx400M -Xms400M
-  KAFKA_SERVICE_ADDR: opentelemetry-demo-kafka:9092
+  OTEL_LOGS_EXPORTER: otlp
   OTEL_RESOURCE_ATTRIBUTES: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.12.0
 
 initContainers:
-  image: busybox
-  tag: latest
+  command:
+    - sh
+    - -c
+    - until nc -z -v -w30 opentelemetry-demo-kafka 9021; do echo waiting
+      for kafka; sleep 2; done;
+  image: busybox:latest
   name: wait-for-kafka
+ 
