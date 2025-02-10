@@ -7,8 +7,8 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-   - port: {{ .Values.service.port }}
-     name: {{ .Values.service.name }}
-     targetPort: {{ .Values.service.targetPort }}
+    port: {{ .Values.service.port }}
+    name: {{ .Values.service.name }}
+    targetPort: {{ .Values.service.targetPort }}
   selector:
     {{- include "opentelemetry-demo-adservice.selectorLabels". | nindent 4}}
