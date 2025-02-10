@@ -12,11 +12,11 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "opentelemetry-demo-accountingservice.selectorLabels" . | nindent 8}}
+        {{- include "opentelemetry-demo-adservice.selectorLabels" . | nindent 8}}
     spec:
       serviceAccount: {{ .Values.serviceAccount.name }}
       containers:
-        - name: {{ .Values.image.tag }}
+        - name: {{ .Values.component }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:

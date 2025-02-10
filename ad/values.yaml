@@ -14,6 +14,11 @@ image :
   tag: "1.12.0-adservice"
   pullPolicy: IfNotPresent
 
+service:
+  port: 8080
+  name: tcp-service
+  targetPort: 8080
+
 ports:
   containerPort: 8080
   name: service

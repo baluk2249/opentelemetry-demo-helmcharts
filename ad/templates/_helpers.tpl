@@ -7,6 +7,6 @@ app.kubernetes.io/version: "1.12.0"
 app.kubernetes.io/part-of: opentelemetry-demo
 {{- end -}}
 
-{{ - define "opentelemetry-demo-accountingservice.selecorLabels" -}}
+{{- define "opentelemetry-demo-adservice.selectorLabels" -}}
 opentelemetry.io/name: opentelemetry-demo-adservice
 {{- end -}}

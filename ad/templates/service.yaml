@@ -3,12 +3,12 @@ kind: Service
 metadata:
   name: {{ .Values.name }}
   labels:
-    {{- include "opentelemetry-demo-adservice.labels". |nindent 4 }}
+    {{- include "opentelemetry-demo-adservice.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
-    port: {{ .Values.service.port }}
-    name: {{ .Values.service.name }}
-    targetPort: {{ .Values.service.targetPort }}
+    - port: {{ .Values.service.port }}
+      name: {{ .Values.service.name }}
+      targetPort: {{ .Values.service.targetPort }}
   selector:
-    {{- include "opentelemetry-demo-adservice.selectorLabels". | nindent 4}}
+    {{- include "opentelemetry-demo-adservice.selectorLabels" . | nindent 4}}
