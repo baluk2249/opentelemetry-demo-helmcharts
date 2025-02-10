@@ -28,6 +28,7 @@ spec:
              value: {{ $value | quote }}
            {{- end }}
       initContainers:
-        - command: {{ .Values.initContainers.command }}
+        - command:
+          - {{ .Values.initContainers.command }}
           image: {{ .Values.initContainers.image }}
           name: {{ .Values.initContainers.name}}
