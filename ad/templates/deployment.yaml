@@ -27,7 +27,8 @@ spec:
            - name: {{ $key }}
              value: {{ $value | quote }}
            {{- end }}
-      initContainers:
-        - command: "{{ .Values.initContainers.command }}"
-          image: {{ .Values.initContainers.image }}
-          name: {{ .Values.initContainers.name}}
+          resources:
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+          volumeMounts:
+      volumes:
