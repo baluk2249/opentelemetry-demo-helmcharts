@@ -1,0 +1,54 @@
+name: opentelemetry-demo-cartservice
+replicaCount: 1
+revisionHistoryLimit: 10
+
+instance: opentelemetry-demo
+part-of: opentelemetry-demo
+component: cartservice
+
+serviceAccount:
+  name: opentelemetry-demo
+
+image :
+  repository: ghcr.io/open-telemetry/demo
+  tag: "1.12.0-cartservice"
+  pullPolicy: IfNotPresent
+
+service:
+  port: 8080
+  name: tcp-service
+  targetPort: 8080
+
+ports:
+  containerPort: 8080
+  name: service
+
+resources:
+  limits:
+    memory: 160Mi
+
+env:
+  FLAG_HOST: opentelemetry-demo-flagd
+  FLAG_PORT: 8013
+  OTEL_SERVICE_NAME: cartservice
+  OTEL_COLLECTOR_NAME: opentelemetry-demo-otelcol
+  CART_SERVICE_PORT: 8080
+  ASPNETCORE_URLS: http://*:$(CART_SERVICE_PORT)
+  VALKEY_ADDR: 'opentelemetry-demo-valkey:6379'
+  OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: cumulative
+  OTEL_EXPORTER_OTLP_ENDPOINT: http://$OTEL_COLLECTOR_NAME:4318
+  OTEL_RESOURCE_ATTRIBUTES: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.12.0
+
+initContainers:
+  - command:
+      - sh
+      - -c
+      - until nc -z -v -w30 opentelemetry-demo-valkey 6379; do echo waiting
+        for valkey; sleep 2; done;
+    image:
+      repository: busybox
+      tag: latest
+    name: wait-for-valkey
+
+  
+
