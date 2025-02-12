@@ -43,7 +43,7 @@ env:
 initContainers:
     command:
       - sh
-      - -c
+      - '-c'
       - "until nc -z -v -w30 opentelemetry-demo-valkey 6379; do echo waiting
         for valkey; sleep 2; done;"
     image:

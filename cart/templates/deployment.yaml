@@ -32,7 +32,7 @@ spec:
               memory: {{ .Values.resources.limits.memory }}
           volumeMounts:
       initContainers:
-        - command: {{ .Values.initContainers.command }}
+        - command: {{- .Values.initContainers.command }}
           image: "{{ .Values.initContainers.image.repository }}:{{ .Values.initContainers.image.tag }}"
           name: {{ .Values.initContainers.name }}
       volumes:
