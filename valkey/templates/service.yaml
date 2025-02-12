@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ .Values.name }}
   labels:
-    {{- include "opentelemetry-demo-adservice.labels" . | nindent 4 }}
+    {{- include "opentelemetry-demo-valkey.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -11,4 +11,4 @@ spec:
       name: {{ .Values.service.name }}
       targetPort: {{ .Values.service.targetPort }}
   selector:
-    {{- include "opentelemetry-demo-adservice.selectorLabels" . | nindent 4}}
+    {{- include "opentelemetry-demo-valkey.selectorLabels" . | nindent 4}}
