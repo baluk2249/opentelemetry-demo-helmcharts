@@ -3,17 +3,17 @@ kind: Deployment
 metadata:
   name: {{ .Values.name }}
   labels:
-    {{- include "opentelemetry-demo-adservice.labels" . | nindent 4 }}
+    {{- include "opentelemetry-demo-valkey.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
-      {{- include "opentelemetry-demo-adservice.selectorLabels" . | nindent 6 }}
+      {{- include "opentelemetry-demo-valkey.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "opentelemetry-demo-adservice.selectorLabels" . | nindent 8}}
+        {{- include "opentelemetry-demo-valkey.selectorLabels" . | nindent 8}}
     spec:
       serviceAccount: {{ .Values.serviceAccount.name }}
       containers:
