@@ -1,0 +1,39 @@
+name: opentelemetry-demo-emailservice
+replicaCount: 1
+revisionHistoryLimit: 10
+
+instance: opentelemetry-demo
+part-of: opentelemetry-demo
+component: emailservice
+
+serviceAccount:
+  name: opentelemetry-demo
+
+image :
+  repository: ghcr.io/open-telemetry/demo
+  tag: "1.12.0-emailservice"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+  name: tcp-service
+  targetPort: 8080
+
+ports:
+  containerPort: 8080
+  name: service
+
+resources:
+  limits:
+    memory: 100Mi
+
+env:
+  OTEL_SERVICE_NAME: emailservice
+  OTEL_COLLECTOR_NAME: opentelemetry-demo-otelcol
+  OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: cumulative
+  EMAIL_SERVICE_PORT: 8080
+  APP_ENV: production
+  OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://$(OTEL_COLLECTOR_NAME):4318/v1/traces
+  OTEL_RESOURCE_ATTRIBUTES: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.12.0
+
