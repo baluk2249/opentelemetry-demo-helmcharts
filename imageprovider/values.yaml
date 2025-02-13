@@ -1,0 +1,40 @@
+name: opentelemetry-demo-imageprovider
+replicaCount: 1
+revisionHistoryLimit: 10
+
+instance: opentelemetry-demo
+part-of: opentelemetry-demo
+component: imageprovider
+
+serviceAccount:
+  name: opentelemetry-demo
+
+image :
+  repository: ghcr.io/open-telemetry/demo
+  tag: "1.12.0-imageprovider"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8081
+  name: tcp-service
+  targetPort: 8081
+
+ports:
+  containerPort: 8081
+  name: service
+
+resources:
+  limits:
+    memory: 50Mi
+
+env:
+  FLAG_HOST: opentelemetry-demo-flagd
+  FLAG_PORT: 8013
+  OTEL_SERVICE_NAME: imageprovider
+  OTEL_COLLECTOR_NAME: opentelemetry-demo-otelcol
+  IMAGE_PROVIDER_PORT: 8081
+  OTEL_COLLECTOR_PORT_GRPC: 4317
+  OTEL_COLLECTOR_HOST: $(OTEL_COLLECTOR_NAME)
+  OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: cumulative
+  OTEL_RESOURCE_ATTRIBUTES: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.12.0

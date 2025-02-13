@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    {{- include "opentelemetry-demo-imageprovider.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "opentelemetry-demo-imageprovider.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "opentelemetry-demo-imageprovider.selectorLabels" . | nindent 8}}
+    spec:
+      serviceAccount: {{ .Values.serviceAccount.name }}
+      containers:
+        - name: {{ .Values.component }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.ports.containerPort }}
+              name: {{ .Values.ports.name }}
+          env:
+           {{- range $key, $value := .Values.env }}
+           - name: {{ $key }}
+             value: {{ $value | quote }}
+           {{- end }}
+          resources:
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+          volumeMounts:
+      volumes:
