@@ -35,7 +35,7 @@ env:
   OTEL_COLLECTOR_NAME: opentelemetry-demo-otelcol
   CHECKOUT_SERVICE_PORT: 8080
   CART_SERVICE_ADDR: opentelemetry-demo-cartservice:8080
-  CART_SERVICE_ADDR: opentelemetry-demo-currencyservice:8080
+  CURRENCY_SERVICE_ADDR: opentelemetry-demo-currencyservice:8080
   EMAIL_SERVICE_ADDR: http://opentelemetry-demo-emailservice:8080
   PAYMENT_SERVICE_ADDR: opentelemetry-demo-paymentservice:8080
   PRODUCT_CATALOG_SERVICE_ADDR: opentelemetry-demo-productcatalogservice:8080
