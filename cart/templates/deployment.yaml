@@ -32,7 +32,11 @@ spec:
               memory: {{ .Values.resources.limits.memory }}
           volumeMounts:
       initContainers:
-        - command: {{- .Values.initContainers.command }}
+        - command:
+            - "sh"
+            - "-c"
+            - until nc -z -v -w30 opentelemetry-demo-valkey 6379; do echo waiting
+              for valkey; sleep 2; done;
           image: "{{ .Values.initContainers.image.repository }}:{{ .Values.initContainers.image.tag }}"
           name: {{ .Values.initContainers.name }}
       volumes:
