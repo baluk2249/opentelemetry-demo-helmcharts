@@ -1,0 +1,39 @@
+name: opentelemetry-demo-shippingservice
+replicaCount: 1
+revisionHistoryLimit: 10
+
+instance: opentelemetry-demo
+part-of: opentelemetry-demo
+component: shippingservice
+
+serviceAccount:
+  name: opentelemetry-demo
+
+image :
+  repository: ghcr.io/open-telemetry/demo
+  tag: "1.12.0-shippingservice"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+  name: tcp-service
+  targetPort: 8080
+
+ports:
+  containerPort: 8080
+  name: service
+
+resources:
+  limits:
+    memory: 20Mi
+
+env:
+  OTEL_SERVICE_NAME: shippingservice
+  OTEL_COLLECTOR_NAME: opentelemetry-demo-otelcol
+  SHIPPING_SERVICE_PORT: 8080
+  QUOTE_SERVICE_ADDR: http://opentelemetry-demo-quoteservice:8080
+  OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: cumulative
+  OTEL_EXPORTER_OTLP_ENDPOINT: http://$(OTEL_COLLECTOR_NAME):4317
+  OTEL_RESOURCE_ATTRIBUTES: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.12.0
+
