@@ -1,0 +1,66 @@
+name: opentelemetry-demo-frontend
+replicaCount: 1
+revisionHistoryLimit: 10
+
+instance: opentelemetry-demo
+part-of: opentelemetry-demo
+component: frontend
+
+serviceAccount:
+  name: opentelemetry-demo
+
+image :
+  repository: ghcr.io/open-telemetry/demo
+  tag: "1.12.0-frontend"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+  name: tcp-service
+  targetPort: 8080
+
+ports:
+  containerPort: 8080
+  name: service
+
+resources:
+  limits:
+    memory: 250Mi
+
+env:
+  FLAG_HOST: opentelemetry-demo-flagd
+  FLAG_PORT: 8013
+  OTEL_SERVICE_NAME: cartservice
+  OTEL_COLLECTOR_NAME: opentelemetry-demo-otelcol
+  FRONTEND_PORT: 8080
+  FRONTEND_ADDR: :8080
+  AD_SERVICE_ADDR: opentelemetry-demo-adservice:8080
+  CART_SERVICE_ADDR: opentelemetry-demo-cartservice:8080
+  CHECKOUT_SERVICE_ADDR: opentelemetry-demo-checkoutservice:8080
+  CURRENCY_SERVICE_ADDR: opentelemetry-demo-currencyservice:8080
+  PRODUCT_CATALOG_SERVICE_ADDR: opentelemetry-demo-productcatalogservice:8080
+  RECOMMENDATION_SERVICE_ADDR: opentelemetry-demo-recommendationservice:8080
+  SHIPPING_SERVICE_ADDR: opentelemetry-demo-shippingservice:8080
+  OTEL_COLLECTOR_HOST: $(OTEL_COLLECTOR_NAME)
+  WEB_OTEL_SERVICE_NAME: frontend-web
+  PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://localhost:8080/otlp-http/v1/traces
+  OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: cumulative
+  OTEL_EXPORTER_OTLP_ENDPOINT: http://$OTEL_COLLECTOR_NAME:4317
+  OTEL_RESOURCE_ATTRIBUTES: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.12.0
+
+initContainers:
+    command: 
+      - "sh"
+      - "-c"
+      - "until nc -z -v -w30 opentelemetry-demo-valkey 6379; do echo waiting for valkey; sleep 2; done;"
+    image:
+      repository: busybox
+      tag: latest
+    name: wait-for-valkey
+
+securityContext:
+  runAsGroup: 1001
+  runAsNonRoot: true
+  runAsUser: 1001
+  
