@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    {{- include "opentelemetry-demo-flagd.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "opentelemetry-demo-flagd.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "opentelemetry-demo-flagd.selectorLabels" . | nindent 8}}
+    spec:
+      serviceAccount: {{ .Values.serviceAccount.name }}
+      containers:
+        - name: {{ .Values.flagd.name }}
+          image: "{{ .Values.flagd.repository }}:{{ .Values.flagd.tag }}"
+          imagePullPolicy: {{ .Values.flagd.pullPolicy }}
+          command:
+            - /flagd-build
+            - start
+            - --uri
+            - file:./etc/flagd/demo.flagd.json
+          ports:
+            - containerPort: {{ .Values.flagd.ports.containerPort }}
+              name: {{ .Values.flagd.ports.name }}
+          env:
+           {{- range $key, $value := .Values.env }}
+           - name: {{ $key }}
+             value: {{ $value | quote }}
+           {{- end }}
+          resources:
+            limits:
+              memory: {{ .Values.flagd.resources.limits.memory }}
+          volumeMounts:
+            - name: config-rw
+              mountPath: /etc/flagd
+        - name: flagdui
+          image: "{{ .Values.flagdui.repository }}:{{ .Values.flagdui.tag}}"
+          imagePullPolicy: {{ .Values.flagdui.imagePullPolicy }}
+          ports:
+            - containerPort: {{ .Values.flagdui.ports.containerPort }}
+              name: {{ .Values.flagdui.ports.name }}
+          env:
+           {{- range $key, $value := .Values.env }}
+           - name: {{ $key }}
+             value: {{ $value | quote }}
+           {{- end }}
+          resources:
+            limits: 
+              memory: {{ .Values.flagdui.resources.limits.memory }}
+          volumeMounts:
+            - mountPath: /app/data
+              name: config-rw
+      initContainers:
+        - command:
+            - sh
+            - "-c"
+            - cp /config-ro/demo.flagd.json /config-rw/demo.flagd.json && cat /config-rw/demo.flagd.json
+          image: busybox
+          name: init-config
+          volumeMounts:
+            - mountPath: /config-ro
+              name: config-ro
+            - mountPath: /config-rw
+              name: config-rw
+      volumes:
+       - name: config-rw
+         emptyDir: {}
+       - configMap:
+          name: 'opentelemetry-demo-flagd-cm'
+         name: config-ro

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.name }}-cm
+  labels: {{- include "opentelemetry-demo-flagd.labels" . | nindent 4 }}
+data:
+  demo.flagd.json: |-
+  {{ .Files.Get "config.json" | nindent 4 }}
