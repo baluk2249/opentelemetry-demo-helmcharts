@@ -1,0 +1,42 @@
+replicaCount: 1
+revisionHistoryLimit: 10
+instance: opentelemetry-demo
+part-of: opentelemetry-demo
+component: frauddetectionservice
+name: opentelemetry-demo-frauddetectionservice
+image:
+  repository: ghcr.io/open-telemetry/demo
+  tag: "1.12.0-frauddetectionservice"
+  pullPolicy: IfNotPresent
+
+
+
+resources:
+  limits:
+    memory: 300Mi
+
+serviceAccount:
+  name: opentelemetry-demo
+
+env:
+  OTEL_SERVICE_NAME: frauddetectionservice
+  OTEL_COLLECTOR_NAME: opentelemetry-demo-otelcol
+  OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: cumulative
+  OTEL_EXPORTER_OTLP_ENDPOINT: http://$OTEL_COLLECTOR_NAME:4318
+  KAFKA_SERVICE_ADDR: opentelemetry-demo-kafka:9092
+  FLAGD_HOST: opentelemetry-demo-flagd
+  FLAGD_PORT: 8013
+  OTEL_RESOURCE_ATTRIBUTES: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.12.0
+
+initContainers:
+  image: busybox
+  tag: latest
+  name: wait-for-kafka
+
+service:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targerPort: 8080
+      name: tcp-service
+    

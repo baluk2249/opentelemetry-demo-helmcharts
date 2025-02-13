@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    {{- include "opentelemetry-demo-frauddetectionservice.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "opentelemetry-demo-frauddetectionservice.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "opentelemetry-demo-frauddetectionservice.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      containers:
+        - name: frauddetectionservice
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          resources:
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+      initContainers:
+        - command:
+          - sh
+          - -c
+          - until nc -z -v -w30 opentelemetry-demo-kafka 9092; do echo waiting
+            for kafka; sleep 2; done;
+          image: busybox:latest
+          name: wait-for-kafka
+      volumes:
