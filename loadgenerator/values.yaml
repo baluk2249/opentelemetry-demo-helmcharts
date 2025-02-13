@@ -1,0 +1,46 @@
+name: opentelemetry-demo-loadgenerator
+replicaCount: 1
+revisionHistoryLimit: 10
+
+instance: opentelemetry-demo
+part-of: opentelemetry-demo
+component: loadgenerator
+
+serviceAccount:
+  name: opentelemetry-demo
+
+image :
+  repository: ghcr.io/open-telemetry/demo
+  tag: "1.12.0-loadgenerator"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8089
+  name: tcp-service
+  targetPort: 8089
+
+ports:
+  containerPort: 8089
+  name: service
+
+resources:
+  limits:
+    memory: 1500Mi
+
+env:
+  FLAG_HOST: opentelemetry-demo-flagd
+  FLAG_PORT: 8013
+  OTEL_SERVICE_NAME: loadgenerator
+  OTEL_COLLECTOR_NAME: opentelemetry-demo-otelcol
+  LOCUST_WEB_PORT: 8089
+  LOCUST_USERS: 10
+  LOCUST_SPAWN_RATE: 1
+  LOCUST_HOST: http://opentelemetry-demo-frontendproxy:8080
+  LOCUST_HEADLESS: false
+  LOCUST_AUTOSTART: true
+  LOCUST_BROWSER_TRAFFIC_ENABLED: true
+  PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION: python
+  OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: cumulative
+  OTEL_EXPORTER_OTLP_ENDPOINT: http://$(OTEL_COLLECTOR_NAME):4317
+  OTEL_RESOURCE_ATTRIBUTES: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=1.12.0
