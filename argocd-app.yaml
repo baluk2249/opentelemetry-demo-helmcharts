@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/your-repo/opentelemetry-demo-helm.git'
+    repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
     targetRevision: HEAD
     path: '/'
   destination:
