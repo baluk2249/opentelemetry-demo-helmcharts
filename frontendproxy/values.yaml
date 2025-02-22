@@ -15,7 +15,7 @@ image :
   pullPolicy: IfNotPresent
 
 service:
-  type: NodePort
+  type: ClusterIp
   port: 8080
   name: tcp-service
   targetPort: 8080
