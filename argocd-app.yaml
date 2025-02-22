@@ -5,10 +5,64 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
-    targetRevision: HEAD
-    path: '/'
+  sources:
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'flagd'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'imageprovider'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'kafka'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'quote'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'cart'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'loadgenerator'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'payment'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'valkey'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'checkout'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'accounting'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'ad'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'shipping'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'recommendation'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'frontend'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'productcatalog'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'currency'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'email'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'frauddetection'
+    - repoURL: 'https://github.com/baluk2249/opentelemetry-demo-helmcharts.git'
+      targetRevision: HEAD
+      path: 'frontendproxy'
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: ecom
